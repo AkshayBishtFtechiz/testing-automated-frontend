@@ -1,3 +1,4 @@
+// eslint-disable-next-line react-hooks/exhaustive-deps
 import React, { useState, useEffect } from "react";
 import {
   Card,
@@ -58,13 +59,6 @@ const AddNewFirms = () => {
   function SlideTransition(props) {
     return <Slide {...props} direction="up" />;
   }
-
-  const handleClick = (Transition) => () => {
-    setState({
-      open: true,
-      Transition,
-    });
-  };
 
   const handleCloseSnack = () => {
     setState({
@@ -368,7 +362,7 @@ const AddNewFirms = () => {
         });
       }
     }, 5000);
-  }, [myStore.isLoading]);
+  }, [myStore.isLoading, state]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   return (
     <div>

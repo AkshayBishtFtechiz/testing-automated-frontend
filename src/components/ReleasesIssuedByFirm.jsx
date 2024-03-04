@@ -138,6 +138,7 @@ const ReleasesIssuedByFirm = () => {
 
   useEffect(() => {
     myStore.setLoading(isLoading, isFetched);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isFetched]);
 
   const separatedData = separateFirmTypes(sequentialData);
