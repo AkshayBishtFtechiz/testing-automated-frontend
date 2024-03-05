@@ -1,4 +1,3 @@
-// eslint-disable-next-line react-hooks/exhaustive-deps
 import React, { useState, useEffect } from "react";
 import {
   Card,
@@ -50,6 +49,7 @@ const AddNewFirms = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
+  const [isClick, setClick] = useState(false);
   const myStore = UseNewsStore();
   const [state, setState] = useState({
     open: false,
@@ -278,6 +278,7 @@ const AddNewFirms = () => {
   // POST API FOR ADDING NEW FIRMS
   const submitData = async (data) => {
     setLoading(true);
+    setClick(true);
     const selectedValue = data.firmName;
     let [firmName, label] = selectedValue.split("#");
     const finalData = firmName;
@@ -320,6 +321,7 @@ const AddNewFirms = () => {
           handleClose();
           fetchFirms();
           testAPICall();
+          setClick(false);
         }
       })
       .catch((error) => {
@@ -349,20 +351,27 @@ const AddNewFirms = () => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      if (myStore.isLoading) {
-        setState({
-          open: true,
-          Transition: SlideTransition,
-        });
-      } else {
-        setState({
-          ...state,
-          open: false,
-        });
-      }
-    }, 5000);
-  }, [myStore.isLoading, state]); // eslint-disable-next-line react-hooks/exhaustive-deps
+    if(isClick === true)
+    {
+      setTimeout(() => {
+        if (myStore.isLoading) {
+          setState({
+            open: true,
+            Transition: SlideTransition,
+          });
+        } else {
+          setState({
+            ...state,
+            open: false,
+          });
+        }
+      }, 5000);
+    }
+   else {
+    return;
+   }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [myStore.isLoading, isClick]);
 
   return (
     <div>
@@ -636,7 +645,8 @@ const AddNewFirms = () => {
           </form>
         </Dialog>
 
-        <Snackbar
+        {myStore.isLoading ? (
+          <Snackbar
           open={state.open}
           onClose={handleCloseSnack}
           TransitionComponent={state.Transition}
@@ -655,6 +665,8 @@ const AddNewFirms = () => {
             )}
           </Box>
         </Snackbar>
+        ): ""}
+        
         {/* MODAL FOR ADDING FIRM */}
       </Card>
       <ToastContainer autoClose={3000} limit={1} theme="light" />
